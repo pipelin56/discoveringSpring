@@ -1,0 +1,22 @@
+#Configuracion de la bd
+spring:
+  jpa:
+    hibernate:
+      ddl-auto: update
+      
+  datasource:
+    url: jdbc:mysql://localhost:3306/practisedb?useSSL=false&useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC
+    username: pipe
+    password: pipe
+#Configuracion del puerto de la aplicacion
+server:
+  port: 9090
+  
+#Config log
+logging:
+  level:
+    root: ERROR
+    com.example.spring.boot.practise: DEBUG
+  file: C:/Users/fbedoya/Desktop/Software/sts-4.0.0.RELEASE/workspace/practiseLog/practiseLog.log
+
+
