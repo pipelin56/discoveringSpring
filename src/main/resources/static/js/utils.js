@@ -1,11 +1,10 @@
 
 $(document).ready(function(){
-	
     $("#idButtonCleanFieldsForm").click(function(){
     	clearFieldsForm($('#formNewUser'));
     });
-    
 });
+
 
 function clearFieldsForm(form){
 	if(form != null && form != ""){

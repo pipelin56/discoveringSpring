@@ -1,5 +1,7 @@
 package com.example.spring.boot.practise.entities;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -18,18 +20,27 @@ public class User {
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Long id;
 	
-	@Column(nullable=false, unique=true)
+	@Column(nullable=false, unique=true, length=12)
 	private String userAlias;
+	@Column(nullable=false, length=30)
 	private String name;
+	@Column(nullable=false, length=40)
 	private String surnames;
+	@Column(nullable=false, length=50)
 	private String email;
+	@Column(nullable=false)
 	private Date dateOfBirth;
+	@Column(nullable=true, length=9)
 	private String movilNumber;
-	
 	@Column(name="is_active", columnDefinition="boolean default true")//Default value, true.
 	private Boolean isActive = Boolean.TRUE;
 	
 	public User() {}
+	
+	public User(Long id) {
+		super();
+		this.id = id;
+	}
 	
 	public User(String userAlias, String name, String surnames, String email, Date dateOfBirth, String movilNumber) {
 		super();
@@ -53,12 +64,13 @@ public class User {
 	}
 	
 
-	public User(UserDTO userDTO) {
+	public User(UserDTO userDTO) throws ParseException {
+		this.id=userDTO.getId();
 		this.userAlias=userDTO.getUserAlias();
 		this.name = userDTO.getName();
 		this.surnames = userDTO.getSurnames();
 		this.email = userDTO.getEmail();
-		this.dateOfBirth = userDTO.getDateOfBirth();
+		this.dateOfBirth = new SimpleDateFormat("dd/MM/yyyy").parse(userDTO.getDateOfBirth());
 		this.movilNumber = userDTO.getMovilNumber();
 	}
 
@@ -127,6 +139,14 @@ public class User {
 		this.movilNumber = movilNumber;
 	}
 
+	@Override
+	public String toString() {
+		return "User [id=" + id + ", userAlias=" + userAlias + ", name=" + name + ", surnames=" + surnames + ", email="
+				+ email + ", dateOfBirth=" + dateOfBirth + ", movilNumber=" + movilNumber + ", isActive=" + isActive
+				+ "]";
+	}
+
+	
 
 
 }

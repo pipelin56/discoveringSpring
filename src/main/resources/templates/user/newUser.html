@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<div th:insert="~{commons/fragments :: header}"></div>	
+</head>
+<body>
+	<div th:insert="~{commons/fragments :: menu}"></div>
+
+	<div class="container h-100">
+		<div class="d-flex align-items-center flex-column justify-content-center h-100 ">
+			<form  class="col-8 needs-validation" novalidate th:action="@{/user/newUser}" th:object="${userDTO}" id="formNewUser" method="post">
+				<input type="hidden" name="id" th:value="${userDTO.id}"/>
+				<div class="form-row">
+					<div class="form-group col-md-6">
+						<label >First name</label> 
+						<input type="text"
+							class="form-control" id="name" th:field="*{name}" name="name"
+							placeholder="Name" required maxlength="30"/>
+						 <span th:if="${#fields.hasErrors('name')}" class="invalid-data-input" th:errors="*{name}"></span>
+					</div>
+					<div class="form-group col-md-6">
+						<label >Last name</label> 
+						<input type="text" class="form-control" id="surnames" th:field="*{surnames}"
+							name="surnames" placeholder="Last name" required maxlength="40"/>
+						 <span th:if="${#fields.hasErrors('surnames')}" class="invalid-data-input" th:errors="*{surnames}"></span>
+					</div>
+				</div>
+				<div class="form-row">
+					<div class="form-group col-md-6">
+						<label >Alias</label> 
+						<div class="input-group">
+							<div class="input-group-prepend">
+					          <span class="input-group-text">@</span>
+							<input type="text" class="form-control" id="userAlias" name="userAlias" th:field="*{userAlias}"
+								placeholder="User's alias" required maxlength="12"/>
+					        </div>
+					        <br>
+							<span th:if="${#fields.hasErrors('userAlias')}" class="invalid-data-input" th:errors="*{userAlias}"></span>
+						</div>
+					</div>
+					<div class="form-group col-md-6">
+						<label >Movil number</label> 
+						 <input type="number" class="form-control" id="movilNumber" name="movilNumber" th:field="*{movilNumber}" placeholder="Movil number" maxlength="9"/>
+						 <span th:if="${#fields.hasErrors('movilNumber')}" class="invalid-data-input" th:errors="*{movilNumber}"></span>
+					</div>
+				</div>
+				<div class="form-row">
+					<div class="form-group col-md-6">
+						<label >Email</label> 
+						<input type="email" class="form-control" id="email" name="email" th:field="*{email}"
+							placeholder="Email" required maxlength="50"  />
+						<span th:if="${#fields.hasErrors('email')}" class="invalid-data-input" th:errors="*{email}"></span>
+					</div>
+						
+					 <div class="form-group col-md-6">
+					 	<label>Date of birthday</label> 
+		                  <input class="form-control"  data-date-format="dd/mm/yyyy" id="datepicker" th:field="*{dateOfBirth}" placeholder="Date of birthday" required>
+		            </div>
+				</div>
+		
+				<button type="submit" class="btn btn-primary">Save</button>
+				<button type="button" class="btn btn-primary" id="idButtonCleanFieldsForm">Clear form</button>
+			</form>
+		</div>
+	</div>
+</body>
+
+</html>

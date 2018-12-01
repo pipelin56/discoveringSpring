@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<title>error 404</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<link rel="stylesheet"
+	href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
+	integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
+	crossorigin="anonymous">
+	<link href="//fonts.googleapis.com/css?family=Courgette" rel="stylesheet" type="text/css" />
+	<link href="/css/style_error_pages.css" rel="stylesheet" type="text/css" media="all" />
+	<link href="/css/custom.css" rel="stylesheet" type="text/css" media="all" />
+</head>
+<body>
+	<div th:insert="~{commons/fragments :: menu}"></div>
+	<div class="wrap">
+		<div class="logo">
+			<h1>404</h1>
+			<p>Error occurred! - Page not Found.</p>
+			<div class="sub">
+				<p>
+					<a href="/">Go home</a>
+				</p>
+			</div>
+		</div>
+	</div>
+	
+</body>
+</html>

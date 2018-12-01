@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<div th:insert="~{commons/fragments :: header}"></div>	
+</head>
+<body>
+	<div th:insert="~{commons/fragments :: menu}"></div>
+	
+	<div th:if="${showModal} == true">
+		<div th:insert="~{commons/fragments :: modal}"></div>
+	</div>
+	 
+
+	<div class="container h-100">
+		<div class="d-flex align-items-center flex-column justify-content-center h-100 ">
+			<div th:if="${userNotFound}">
+				<h1><span class="badge badge-secondary"  th:text="#{tittle.no.users}"></span></h1>
+			</div>
+			<div th:unless="${userNotFound}">
+		
+				<h1><span class="badge badge-secondary"  th:text="#{tittle.all.users}">:</span></h1>
+				<table class="table">
+					<thead class="thead-dark">
+						<tr>
+							<th scope="col" th:text="#{user.alias}"></th>
+							<th scope="col" th:text="#{user.name}"></th>
+							<th scope="col" th:text="#{user.surnames}"></th>
+							<th scope="col" th:text="#{user.date.of.birth}"></th>
+							<th scope="col" th:text="#{user.movil}"></th>
+							<th scope="col" th:text="#{user.email}"></th>
+							<th scope="col" th:text="#{user.actions}"></th>
+							<th scope="col"></th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr th:each="user : ${listOfUsers}">
+							<th scope="row" th:text="${user.userAlias}"></th>
+							<td th:text="${user.name}"></td>
+							<td th:text="${user.surnames}"></td>
+							<td th:text="${user.dateOfBirth}"></td>
+							<td th:text="${user.movilNumber}"></td>
+							<td th:text="${user.email}"></td>
+							<td>
+								<ul class="list-inline">
+									<li class="list-inline-item"><a th:href="@{'/user/showUser/' + ${user.userAlias}}"><img src="/icons/eye.svg"	alt="Show user0s data" class="icons-actions-size"/></a></li>
+									<li class="list-inline-item"><a th:href="@{'/user/editUser/' + ${user.id}}"><img src="/icons/edit.svg"	alt="Show user0s data" class="icons-actions-size"/></a></li>
+									<li class="list-inline-item"><a id="idDeleteUser" th:href="@{'/user/deleteUser/' + ${user.id}}"><img src="/icons/trashcan.svg"	alt="Show user0s data" class="icons-actions-size"/></a></li>
+								</ul>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+	
+	
+	
+</body>
+
+<script type="text/javascript">
+/*
+$("a#idDeleteUser").click(function() {
+	$.ajax({
+        "type": "GET",
+        "url": $(this).attr("href"),
+        "async": false,
+        "accept": 'application/json; charset=utf-8',
+        "success": function(data){ 	
+        	if(data.result){
+        		alert(data.messageKey);
+        		$("a#idDeleteUser").closest("tr")
+        							.remove();
+        		$('#myModal').modal('show');
+        	}
+        }
+    });
+	
+	return false;
+});*/
+</script>
+
+
+</html>

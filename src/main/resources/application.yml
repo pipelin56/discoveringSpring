@@ -1,14 +1,13 @@
-#Configuracion de la bd
+#Config database
 spring:
   jpa:
     hibernate:
       ddl-auto: update
-      
   datasource:
-    url: jdbc:mysql://localhost:3306/practisedb?useSSL=false&useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC
+    url: jdbc:mysql://localhost:3306/practisedb?useSSL=false&useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
     username: pipe
-    password: pipe
-#Configuracion del puerto de la aplicacion
+    password: pipe  
+#Config application port
 server:
   port: 9090
   
@@ -17,6 +16,9 @@ logging:
   level:
     root: ERROR
     com.example.spring.boot.practise: DEBUG
+    org.hibernate.SQL: DEBUG #Shows SQL queries
+    org.hibernate.type.descriptor.sql.BasicBinder: TRACE #Shows SQL queries parameters
+      
   file: C:/Users/fbedoya/Desktop/Software/sts-4.0.0.RELEASE/workspace/practiseLog/practiseLog.log
 
 

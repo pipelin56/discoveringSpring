@@ -1,5 +1,6 @@
 package com.example.spring.boot.practise.utils;
 
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -15,18 +16,16 @@ public class UtilsConvertDTO {
 	
 	public static List<UserDTO> convertListUserToListUserDTO(List<User> listUsers) {
 		List<UserDTO> listDTOs = new ArrayList<UserDTO>();
-		listDTOs = listUsers.stream().map(UtilsConvertDTO::convertUserToUserDTO).collect(Collectors.toList());
+		listDTOs = listUsers.stream()
+							.map(UtilsConvertDTO::convertUserToUserDTO)
+							.collect(Collectors.toList());
 		return listDTOs;
 	}
 	
-	public static User convertUserDTOToUser(UserDTO userDTO) {
+	public static User convertUserDTOToUser(UserDTO userDTO) throws ParseException {
 		return new User(userDTO);
 	}
 	
-	public static List<User> convertListUserDTOToListUser(List<UserDTO> listUserDTO){
-		List<User> listUser = new ArrayList<User>();
-		listUser = listUserDTO.stream().map(UtilsConvertDTO::convertUserDTOToUser).collect(Collectors.toList());
-		return listUser;
-	}
+	
 
 }

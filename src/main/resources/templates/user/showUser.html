@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<div th:insert="~{commons/fragments :: header}"></div>	
+</head>
+<body>
+	<div th:insert="~{commons/fragments :: menu}"></div>
+	<div class="container">
+		<div class="d-flex align-items-center flex-column justify-content-center h-100 ">
+			<div th:if="${noUserFound}">
+				<h1  th:text="#{user.not.exists(${userAlias})}"></h1>
+			</div>
+			<div  class="row col-md-8" th:unless="${userNotFound}">
+				<h1 th:text="#{user.information(${userDTO.userAlias})}">:</h1>
+			
+				<div class="row col-md-12">
+					<div class="col-md-6">
+						<label th:text="#{user.name}"></label>:  <span th:text="${userDTO.name}"></span>
+					</div>
+					<div class="col-md-6">
+						<label th:text="#{user.surnames}"></label>: <span th:text="${userDTO.surnames}"></span>
+					</div>
+				</div>
+				<div class="row col-md-12">
+					<div class="col-md-6">
+						<label th:text="#{user.date.of.birth}"> </label>:  <span th:text="${userDTO.dateOfBirth}"></span>
+					</div>
+					<div class="col-md-6">
+						<label th:text="#{user.movil}"></label>: <span th:text="${userDTO.movilNumber}"></span> 
+					</div>
+				</div>
+				<div class="row col-md-12">
+					<div class="col-md-6">
+						<label th:text="#{user.email}"></label>: <span th:text="${userDTO.email}"></span>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+</html>
