@@ -3,6 +3,20 @@ $(document).ready(function(){
     $("#idButtonCleanFieldsForm").click(function(){
     	clearFieldsForm($('#formNewUser'));
     });
+    
+	$("#languageSelector").change(function () {
+		        var selectedOption = $('#languageSelector').val();
+				var url = window.location.href;
+		        if (selectedOption != ''){
+					var pos = url.search("lang=");
+					if(pos > 0){
+						url = url.substring(0,pos+5) + selectedOption + url.substring(pos+7,url.length);						
+						window.location.replace(url);
+					}
+					else
+			           window.location.replace(url+'?lang=' + selectedOption);
+		        }
+    });
 });
 
 

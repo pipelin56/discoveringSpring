@@ -70,7 +70,7 @@ public class UserRepositoryTests {
 		assertThat(userFound.getId()).isEqualTo(user.getId());
 		assertThat(userFound.getName()).isEqualTo(user.getName());
 		assertThat(userFound.getSurnames()).isEqualTo(user.getSurnames());
-		assertThat(userFound.getMovilNumber()).isEqualTo(user.getMovilNumber());
+		assertThat(userFound.getMobilNumber()).isEqualTo(user.getMobilNumber());
 		assertThat(userFound.getEmail()).isEqualTo(user.getEmail());
 	}
 	

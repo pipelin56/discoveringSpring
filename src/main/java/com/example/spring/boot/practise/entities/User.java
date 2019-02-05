@@ -9,11 +9,13 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Table;
 
 import com.example.spring.boot.practise.dto.UserDTO;
 
 
 @Entity
+@Table(name="USERS")
 public class User {
 	
 	@Id
@@ -30,8 +32,8 @@ public class User {
 	private String email;
 	@Column(nullable=false)
 	private Date dateOfBirth;
-	@Column(nullable=true, length=9)
-	private String movilNumber;
+	@Column(nullable=true, length=10)
+	private String mobilNumber;
 	@Column(name="is_active", columnDefinition="boolean default true")//Default value, true.
 	private Boolean isActive = Boolean.TRUE;
 	
@@ -49,7 +51,7 @@ public class User {
 		this.surnames = surnames;
 		this.email = email;
 		this.dateOfBirth = dateOfBirth;
-		this.movilNumber=movilNumber;
+		this.mobilNumber=movilNumber;
 	}	
 	
 	public User(Long id, String userAlias, String name, String surnames, String email, Date dateOfBirth, String movilnumber) {
@@ -60,7 +62,7 @@ public class User {
 		this.surnames = surnames;
 		this.email = email;
 		this.dateOfBirth = dateOfBirth;
-		this.movilNumber = movilnumber;
+		this.mobilNumber = movilnumber;
 	}
 	
 
@@ -71,7 +73,7 @@ public class User {
 		this.surnames = userDTO.getSurnames();
 		this.email = userDTO.getEmail();
 		this.dateOfBirth = new SimpleDateFormat("dd/MM/yyyy").parse(userDTO.getDateOfBirth());
-		this.movilNumber = userDTO.getMovilNumber();
+		this.mobilNumber = userDTO.getMobilNumber();
 	}
 
 
@@ -131,18 +133,18 @@ public class User {
 		this.userAlias = userAlias;
 	}
 
-	public String getMovilNumber() {
-		return movilNumber;
+	public String getMobilNumber() {
+		return mobilNumber;
 	}
 
-	public void setMovilNumber(String movilNumber) {
-		this.movilNumber = movilNumber;
+	public void setMobilNumber(String mobilNumber) {
+		this.mobilNumber = mobilNumber;
 	}
 
 	@Override
 	public String toString() {
 		return "User [id=" + id + ", userAlias=" + userAlias + ", name=" + name + ", surnames=" + surnames + ", email="
-				+ email + ", dateOfBirth=" + dateOfBirth + ", movilNumber=" + movilNumber + ", isActive=" + isActive
+				+ email + ", dateOfBirth=" + dateOfBirth + ", movilNumber=" + mobilNumber + ", isActive=" + isActive
 				+ "]";
 	}
 

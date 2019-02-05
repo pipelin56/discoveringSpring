@@ -13,22 +13,22 @@ public class UserDTO {
 	
 	private Long id;
 	@NotNull
-	@Size(min=3, max=12, message="User alias must be between 3 and 12 characters.")
+	@Size(min=3, max=12, message="{validation.user.alias}")
 	private String userAlias;
 	@NotNull
-	@Size(min=3, max=30, message="Name must be between 3 and 30 characters.")
+	@Size(min=3, max=30, message="{validation.user.name}")
 	private String name;
 	@NotNull
-	@Size(min=3, max=40, message="Last name must be between 3 and 40 characters.")
+	@Size(min=3, max=40, message="{validation.user.surnames}")
 	private String surnames;
 	@Email
-	@Size(min=5, max=50, message="Email must be between 5 and 12 characters.")
+	@Size(min=5, max=50, message="{validation.user.email}")
 	private String email;
 	private Boolean isActive = Boolean.TRUE;
 	@NotEmpty
-	@Size(min=9, max=9, message="Movil number provided is wrong.")
-	private String movilNumber;
-	@NotEmpty
+	@Size(min=9, max=10, message="{validation.user.mobilNumber}")
+	private String mobilNumber;
+	@NotEmpty(message="{validation.user.date.of.birth}")
 	private String dateOfBirth;
 	
 	
@@ -41,7 +41,7 @@ public class UserDTO {
 		this.name = user.getName();
 		this.surnames = user.getSurnames();
 		this.email = user.getEmail();
-		this.movilNumber = user.getMovilNumber();
+		this.mobilNumber = user.getMobilNumber();
 		this.dateOfBirth = new SimpleDateFormat("dd/MM/yyyy").format(user.getDateOfBirth());
 	}
 	
@@ -102,18 +102,18 @@ public class UserDTO {
 	}
 
 
-	public String getMovilNumber() {
-		return movilNumber;
+	public String getMobilNumber() {
+		return mobilNumber;
 	}
 
-	public void setMovilNumber(String movilNumber) {
-		this.movilNumber = movilNumber;
+	public void setMobilNumber(String mobilNumber) {
+		this.mobilNumber = mobilNumber;
 	}
 
 	@Override
 	public String toString() {
 		return "UserDTO [userAlias=" + userAlias + ", name=" + name + ", surnames=" + surnames + ", email=" + email
-				+ ", isActive=" + isActive + ", movilNumber=" + movilNumber + ", dateOfBirth=" + dateOfBirth + "]";
+				+ ", isActive=" + isActive + ", movilNumber=" + mobilNumber + ", dateOfBirth=" + dateOfBirth + "]";
 	}
 
 }

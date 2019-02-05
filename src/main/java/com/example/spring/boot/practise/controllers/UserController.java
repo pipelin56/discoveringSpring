@@ -17,6 +17,8 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.SessionAttributes;
+import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -25,7 +27,10 @@ import com.example.spring.boot.practise.service.UserService;
 
 @Controller
 @RequestMapping("/user")
-public class UserController {
+@SessionAttributes("userDTO")
+public class UserController extends BaseController{
+	
+	private static final Logger LOG = LoggerFactory.getLogger(UserController.class);
 	
 	//View's path
 	private static final String TEMPLATE_NEW_USER = "user/newUser";
@@ -34,12 +39,12 @@ public class UserController {
 	
 	//Keys model
 	private static final String KEY_USERDTO = "userDTO";
-	private static final String KEY_USER_NOT_FOUND = "userNotFound";
 	private static final String KEY_USER_ALIAS = "userAlias";
 	private static final String KEY_SHOW_MODAL = "showModal";
 	private static final String KEY_LIST_OF_USERS = "listOfUsers";
-	private static final String KEY_MSG_PROP_TITTLE_MODAL = "messagePropertiesTittleModal";
+	private static final String KEY_USER_NOT_FOUND = "userNotFound";
 	private static final String KEY_MSG_PROP_BODY_MODAL = "messagePropertiesBodyModal";
+	private static final String KEY_MSG_PROP_TITTLE_MODAL = "messagePropertiesTittleModal";
 
 	//Keys message.properties
 	private static final String MODAL_TITULO_OK = "modal.titulo.ok";
@@ -51,21 +56,18 @@ public class UserController {
 	private static final String REDIRECT_USER_SHOW_ALL_USER = "redirect:/user/showAllUser";
 	private static final String REDIRECT_SHOW_USER = "redirect:showUser/";
 	
-	
 	@Autowired
 	private UserService userService;
 	@Autowired
 	private MessageSource messageSource;
 	
-	
-	private static final Logger LOG = LoggerFactory.getLogger(UserController.class);
 
 	/**
 	 * Shows template to create a new User
 	 * @return ModelAndView with an empty UserDTO and a template to create it
 	 */
 	@GetMapping("/newUser")
-	public ModelAndView newUser() {
+	public ModelAndView newUser(Locale locale) {
 		LOG.debug("Call to newUser()");
 		
 		ModelAndView mav = new ModelAndView(TEMPLATE_NEW_USER);
@@ -81,9 +83,9 @@ public class UserController {
 	 * @return template showUSer
 	 */
 	@PostMapping("/newUser")
-	public String addNewuser(@Valid @ModelAttribute UserDTO newUserDTO, BindingResult bindingResult, Model model) {
+	public String saveNewuser(@Valid @ModelAttribute UserDTO newUserDTO, BindingResult bindingResult, Model model, SessionStatus status) {
 		LOG.debug("Call to newUser() with data: {}",newUserDTO);
-		
+
 		if(bindingResult.hasErrors()) {	
 			LOG.debug("Finishing call to newUser()  without save because new user has invalid input data");
 			return TEMPLATE_NEW_USER;
@@ -92,12 +94,13 @@ public class UserController {
 			try{
 				userDTO = userService.saveOrUpdate(newUserDTO);
 				if(userDTO == null)
-					throw new Exception(); //TODO: mejorar, no lanzar excepcion
+					throw new Exception(); //TODO: improve this code, no throw exception
 			}catch(Exception e) {
 				LOG.error(new StringBuilder("Exception in newUser when saving new user. Exception: ").append(e.getMessage()).toString());
 				LOG.debug("Finishing call to newUser() without save");
 				return TEMPLATE_NEW_USER;	
 			}
+			status.setComplete();
 			LOG.debug("Finishing call to newUser() after save new user: {}", userDTO);
 			return REDIRECT_SHOW_USER+userDTO.getUserAlias();
 		}
@@ -137,7 +140,8 @@ public class UserController {
 	public String showAllUsers( @ModelAttribute(KEY_SHOW_MODAL) String attrRedirectShowModal, 
 								@ModelAttribute(KEY_MSG_PROP_TITTLE_MODAL) String attrRedirectTittleMessage,  
 								@ModelAttribute(KEY_MSG_PROP_BODY_MODAL) String attrRedirectBodyMessage, 
-								Model model) {
+								Model model,
+								Locale locale) {
 		LOG.debug("Call to showAllUser() ");
 		
 		List<UserDTO> listUsers = userService.getUsers();
@@ -145,7 +149,7 @@ public class UserController {
 			model.addAttribute(KEY_LIST_OF_USERS, listUsers);
 		else 
 			model.addAttribute(KEY_USER_NOT_FOUND, Boolean.TRUE);
-				
+		
 		LOG.debug("Finishing call to showAllUser() ");
 		return TEMPLATE_SHOW_ALL_USERS;
 	}
@@ -158,22 +162,22 @@ public class UserController {
 	 * @return view of users
 	 */
 	@GetMapping(value="/deleteUser/{id}")
-	public String deleteUser(@PathVariable Long id, RedirectAttributes redir) {
+	public String deleteUser(@PathVariable Long id, RedirectAttributes redir, Locale locale) {
 		LOG.debug("Call to deleteUser()");
 		
 		redir.addFlashAttribute(KEY_SHOW_MODAL, Boolean.TRUE);
 		try {
 			 Boolean userDeleted = userService.deleteUser(id);
 			if(userDeleted) {
-				redir.addFlashAttribute(KEY_MSG_PROP_TITTLE_MODAL, messageSource.getMessage(MODAL_TITULO_OK, null, MODAL_TITULO_OK, Locale.getDefault()));
-				redir.addFlashAttribute(KEY_MSG_PROP_BODY_MODAL, messageSource.getMessage(MODAL_BODY_OK, null, MODAL_BODY_OK, Locale.getDefault()));
+				redir.addFlashAttribute(KEY_MSG_PROP_TITTLE_MODAL, messageSource.getMessage(MODAL_TITULO_OK, null, MODAL_TITULO_OK, locale));
+				redir.addFlashAttribute(KEY_MSG_PROP_BODY_MODAL, messageSource.getMessage(MODAL_BODY_OK, null, MODAL_BODY_OK, locale));
 			}
 			else {
 				throw new Exception();
 			}
 		} catch (Exception e) {
-			redir.addFlashAttribute(KEY_MSG_PROP_TITTLE_MODAL, messageSource.getMessage(MODAL_TITULO_KO, null, MODAL_TITULO_KO, Locale.getDefault()));
-			redir.addFlashAttribute(KEY_MSG_PROP_BODY_MODAL, messageSource.getMessage(MODAL_BODY_KO, null, MODAL_BODY_KO, Locale.getDefault()));
+			redir.addFlashAttribute(KEY_MSG_PROP_TITTLE_MODAL, messageSource.getMessage(MODAL_TITULO_KO, null, MODAL_TITULO_KO, locale));
+			redir.addFlashAttribute(KEY_MSG_PROP_BODY_MODAL, messageSource.getMessage(MODAL_BODY_KO, null, MODAL_BODY_KO, locale));
 			LOG.error(new StringBuilder("Error deleting user with id: ").append(id).toString());
 			LOG.debug("Finishing call to deleteUser() ");
 			return REDIRECT_USER_SHOW_ALL_USER;
@@ -200,7 +204,7 @@ public class UserController {
 			else {
 				model.addAttribute(KEY_USERDTO, userDTO);
 			}
-				
+			
 		}catch(Exception e) {
 			LOG.error(new StringBuilder("Error modifiying user :").append(e.getMessage()).toString());
 		}
@@ -208,5 +212,6 @@ public class UserController {
 		LOG.debug("Finishing call to editUser() ");
 		return TEMPLATE_NEW_USER;
 	}
-
+	
+	
 }

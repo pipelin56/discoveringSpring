@@ -1,32 +1,33 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head>
-	<div th:insert="~{commons/fragments :: header}"></div>	
+<head th:insert="~{commons/fragments :: header}">
+
 </head>
 <body>
-	<div th:insert="~{commons/fragments :: menu}"></div>
+	
+	<div th:replace="~{commons/fragments :: menu }">
+	</div>
 	
 	<div th:if="${showModal} == true">
 		<div th:insert="~{commons/fragments :: modal}"></div>
 	</div>
 	 
 
-	<div class="container h-100">
-		<div class="d-flex align-items-center flex-column justify-content-center h-100 ">
+	<div class="container">
+		<div >
 			<div th:if="${userNotFound}">
-				<h1><span class="badge badge-secondary"  th:text="#{tittle.no.users}"></span></h1>
+				<h1  th:text="#{tittle.no.users}" class="text-secondary border border-success border-top-0 border-left-0 border-right-0"></h1>
 			</div>
 			<div th:unless="${userNotFound}">
-		
-				<h1><span class="badge badge-secondary"  th:text="#{tittle.all.users}">:</span></h1>
-				<table class="table">
-					<thead class="thead-dark">
+				<h1 th:text="#{tittle.all.users}" class="text-secondary border border-success border-top-0 border-left-0 border-right-0"></h1>
+				<table class="table table-striped">
+					<thead>
 						<tr>
 							<th scope="col" th:text="#{user.alias}"></th>
 							<th scope="col" th:text="#{user.name}"></th>
 							<th scope="col" th:text="#{user.surnames}"></th>
 							<th scope="col" th:text="#{user.date.of.birth}"></th>
-							<th scope="col" th:text="#{user.movil}"></th>
+							<th scope="col" th:text="#{user.mobil}"></th>
 							<th scope="col" th:text="#{user.email}"></th>
 							<th scope="col" th:text="#{user.actions}"></th>
 							<th scope="col"></th>
@@ -34,11 +35,11 @@
 					</thead>
 					<tbody>
 						<tr th:each="user : ${listOfUsers}">
-							<th scope="row" th:text="${user.userAlias}"></th>
+							<td th:text="${user.userAlias}"></td>
 							<td th:text="${user.name}"></td>
 							<td th:text="${user.surnames}"></td>
 							<td th:text="${user.dateOfBirth}"></td>
-							<td th:text="${user.movilNumber}"></td>
+							<td th:text="${user.mobilNumber}"></td>
 							<td th:text="${user.email}"></td>
 							<td>
 								<ul class="list-inline">
@@ -57,28 +58,4 @@
 	
 	
 </body>
-
-<script type="text/javascript">
-/*
-$("a#idDeleteUser").click(function() {
-	$.ajax({
-        "type": "GET",
-        "url": $(this).attr("href"),
-        "async": false,
-        "accept": 'application/json; charset=utf-8',
-        "success": function(data){ 	
-        	if(data.result){
-        		alert(data.messageKey);
-        		$("a#idDeleteUser").closest("tr")
-        							.remove();
-        		$('#myModal').modal('show');
-        	}
-        }
-    });
-	
-	return false;
-});*/
-</script>
-
-
 </html>

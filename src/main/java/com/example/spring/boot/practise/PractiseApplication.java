@@ -19,21 +19,23 @@ public class PractiseApplication implements WebMvcConfigurer {
 	
 	
 	@Bean
-	public SessionLocaleResolver localResolver() {
+	public SessionLocaleResolver localeResolver() {
 		SessionLocaleResolver sessionLocResol = new SessionLocaleResolver();
-		sessionLocResol.setDefaultLocale(Locale.ENGLISH);
+		sessionLocResol.setDefaultLocale(new Locale("es", "ES")); 
 		return sessionLocResol;
 	}
 	
 	@Bean
 	public LocaleChangeInterceptor localeChangeInterceptor() {
-		LocaleChangeInterceptor localChangIntercep = new LocaleChangeInterceptor();
-		localChangIntercep.setParamName("lang");
-		return localChangIntercep;
+		LocaleChangeInterceptor localeChangIntercep = new LocaleChangeInterceptor();
+		localeChangIntercep.setParamName("lang");
+		return localeChangIntercep;
 	}
 	
 	@Override
 	public void addInterceptors(InterceptorRegistry registry) {
 		registry.addInterceptor(localeChangeInterceptor());
 	}
+	
+
 }

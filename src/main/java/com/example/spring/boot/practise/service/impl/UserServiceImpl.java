@@ -6,6 +6,7 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.example.spring.boot.practise.dto.UserDTO;
 import com.example.spring.boot.practise.entities.User;
@@ -21,6 +22,7 @@ public class UserServiceImpl implements UserService {
 	
 
 	@Override
+	@Transactional
 	public UserDTO saveOrUpdate(UserDTO userDTO) throws Exception {
 		User user = userRepository.save(new User(userDTO));
 		if(user != null)
@@ -30,6 +32,7 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
+	@Transactional(readOnly=true)
 	public List<UserDTO> getUsers() {
 		List<User> listUsers = new ArrayList<>();
 		Iterable<User> iterUser = userRepository.findAll();
@@ -44,6 +47,7 @@ public class UserServiceImpl implements UserService {
 
 
 	@Override
+	@Transactional
 	public Boolean deleteUser(Long id) throws Exception {
 		Boolean existUser = userRepository.existsById(id);
 		if(existUser) {
@@ -58,6 +62,7 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
+	@Transactional(readOnly=true)
 	public UserDTO getUserByUserAlias(String userAlias) throws Exception {
 		User user = userRepository.findUserByUserAlias(userAlias);
 		if(user != null)
@@ -67,6 +72,7 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
+	@Transactional(readOnly=true)
 	public UserDTO getUserById(Long id) {
 		if(userRepository.existsById(id)) {
 			Optional<User> user = userRepository.findById(id);
