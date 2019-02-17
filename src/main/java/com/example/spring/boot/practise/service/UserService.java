@@ -2,6 +2,9 @@ package com.example.spring.boot.practise.service;
 
 import java.util.List;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+
 import com.example.spring.boot.practise.dto.UserDTO;
 
 public interface UserService {
@@ -42,5 +45,11 @@ public interface UserService {
 	 * @return UserDTO userDTO
 	 */
 	public UserDTO getUserById(Long id);
+	
+	/**
+	 * Return a Page of all user in database
+	 * @return Page<UserDTO>
+	 */
+	public Page<UserDTO> getUsersPaged(Pageable pageable);
 	
 }

@@ -50,11 +50,50 @@
 					<option th:each="i : ${listOfLang}" 
 							th:value="${i}" 
 							th:text="#{lang.+${i}}"
-		      				th:selected="${i==localeLanguage}"></option>
+		      				th:selected="${i==localeLanguage}">
+		      		</option>
 				</select>
 			</div>	
 		</nav>
 		
+	</div>
+	
+	<!-- Fragment table paginator -->
+	<div th:fragment="paginator">
+		<input type="hidden" id="numRows" th:value="${page.totalRows}"/>
+		<nav>
+			<ul class="pagination">
+				<li th:class="${page.first ? 'page-item disabled' : 'page-item'}">
+					<span class="page-link" th:if="${page.first}" th:text="#{btn.first}"></span>
+					<a class="page-link" th:if="${not page.first}" th:href="@{${page.url}(page=0)}" th:text="#{btn.first}"></a>
+				</li>
+				<li th:class="${page.hasPrevious? 'page-item' : 'page-item disabled'}">
+					<span class="page-link" th:if="${not page.hasPrevious}">&laquo</span>
+					<a class="page-link" th:if="${page.hasPrevious}" th:href="@{${page.url}(page=${page.actualPage-2})}">&laquo</a>
+				</li>
+				<li th:each="item : ${page.listOfPages}"  class="page-item" th:class="${item.isActual? 'page-item disabled' : 'page-item'}">
+					<span class="page-link" th:if="${item.isActual}" th:text="${item.numberOfPage}"></span>
+					<a class="page-link" th:if="${not item.isActual}" th:href="@{${page.url}(page=${item.numberOfPage-1})}" th:text="${item.numberOfPage}"></a>
+				</li>
+				<li  th:class="${page.hasNext? 'page-item' : 'page-item disabled'}">
+					<span class="page-link" th:if="${not page.hasNext}">&raquo</span>
+					<a class="page-link" th:if="${page.hasNext}" th:href="@{${page.url}(page=${page.actualPage})}">&raquo</a>
+				</li>
+				<li  th:class="${page.last? 'page-item disabled' : 'page-item'}">
+					<span class="page-link" th:if="${page.last}" th:text="#{btn.last}"></span>
+					<a class="page-link" th:if="${not page.last}" th:href="@{${page.url}(page=${page.totalPages-1})}" th:text="#{btn.last}"></a>
+				</li>
+				<li >
+					<input type="hidden" th:value="${rowsPerPage}"/>
+					<select th:with="rowsPerPage = *{rowsPerPage}"name="rowsPerPage" id="rowsPerPageSelector" class="page-link" >
+						<option th:each="i : ${listOfRowsPerPage}" 
+								th:value="${i}" 
+								th:text="${i}"
+			      				th:selected="${i==rowsPerPage}"></option>
+					</select>
+				</li>
+			</ul>
+		</nav>
 	</div>
 	
 

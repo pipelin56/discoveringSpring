@@ -5,6 +5,9 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -12,7 +15,7 @@ import com.example.spring.boot.practise.dto.UserDTO;
 import com.example.spring.boot.practise.entities.User;
 import com.example.spring.boot.practise.repositories.UserRepository;
 import com.example.spring.boot.practise.service.UserService;
-import com.example.spring.boot.practise.utils.UtilsConvertDTO;
+import com.example.spring.boot.practise.util.UtilsConvertDTO;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -84,5 +87,12 @@ public class UserServiceImpl implements UserService {
 			return null;
 		}
 	}
+	
+	@Override
+	public Page<UserDTO> getUsersPaged(Pageable pageable) {
+		Page<User> pageUser = userRepository.findAll(pageable);
+		return  new PageImpl<>(UtilsConvertDTO.convertListUserToListUserDTO(pageUser.getContent()), pageable, pageUser.getTotalElements());
+	}
+
 
 }

@@ -1,4 +1,4 @@
-package com.example.spring.boot.practise.utils;
+package com.example.spring.boot.practise.util;
 
 import java.text.ParseException;
 import java.util.ArrayList;
