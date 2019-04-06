@@ -8,54 +8,17 @@
 	<div th:replace="~{commons/fragments :: menu }">
 	</div>
 	
-	<div th:if="${showModal} == true">
-		<div th:insert="~{commons/fragments :: modal}"></div>
-	</div>
-	 
-
 	<div class="container">
-		<div >
-			<div th:if="${userNotFound}">
-				<h1  th:text="#{tittle.no.users}" class="text-secondary border border-success border-top-0 border-left-0 border-right-0"></h1>
-			</div>
-			<div th:unless="${userNotFound}">
-				<h1 th:text="#{tittle.all.users}" class="text-secondary border border-success border-top-0 border-left-0 border-right-0"></h1>
-				<table class="table table-striped">
-					<thead>
-						<tr>
-							<th scope="col" th:text="#{user.alias}"></th>
-							<th scope="col" th:text="#{user.name}"></th>
-							<th scope="col" th:text="#{user.surnames}"></th>
-							<th scope="col" th:text="#{user.date.of.birth}"></th>
-							<th scope="col" th:text="#{user.mobil}"></th>
-							<th scope="col" th:text="#{user.email}"></th>
-							<th scope="col" th:text="#{user.actions}"></th>
-							<th scope="col"></th>
-						</tr>
-					</thead>
-					<tbody>
-						<tr th:each="user : ${listOfUsers}">
-							<td th:text="${user.userAlias}"></td>
-							<td th:text="${user.name}"></td>
-							<td th:text="${user.surnames}"></td>
-							<td th:text="${user.dateOfBirth}"></td>
-							<td th:text="${user.mobilNumber}"></td>
-							<td th:text="${user.email}"></td>
-							<td>
-								<ul class="list-inline">
-									<li class="list-inline-item"><a th:href="@{'/user/showUser/' + ${user.userAlias}}"><img src="/icons/eye.svg"	alt="Show user0s data" class="icons-actions-size"/></a></li>
-									<li class="list-inline-item"><a th:href="@{'/user/editUser/' + ${user.id}}"><img src="/icons/edit.svg"	alt="Show user0s data" class="icons-actions-size"/></a></li>
-									<li class="list-inline-item"><a id="idDeleteUser" th:href="@{'/user/deleteUser/' + ${user.id}}"><img src="/icons/trashcan.svg"	alt="Show user0s data" class="icons-actions-size"/></a></li>
-								</ul>
-							</td>
-						</tr>
-					</tbody>
-				</table>
-				<div th:insert="~{commons/fragments :: paginator}"></div>
-			</div>
+		<h1 th:text="#{tittle.all.users}" class="text-secondary border border-success border-top-0 border-left-0 border-right-0 mt-5"></h1>
+		
+		<div class="row my-5 pl-5">
+			<table id="idTableListUsers" class="table table-striped"></table>
 		</div>
+		
+		<div th:insert="~{commons/fragments :: modalConfirmation}"></div>
+		<div th:insert="~{commons/fragments :: modalInformationCustom}"></div>
+		<div th:insert="~{js/jsShowAllUsers :: jsShowAllUsers}"></div>
 	</div>
-	
 	
 	
 </body>

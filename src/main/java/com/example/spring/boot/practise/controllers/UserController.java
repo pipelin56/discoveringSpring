@@ -1,33 +1,29 @@
 package com.example.spring.boot.practise.controllers;
 
-import java.util.Locale;
-
 import javax.validation.Valid;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.MessageSource;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.example.spring.boot.practise.dto.DataTableParamsDTO;
+import com.example.spring.boot.practise.dto.DataTableResultDTO;
 import com.example.spring.boot.practise.dto.UserDTO;
 import com.example.spring.boot.practise.service.UserService;
-import com.example.spring.boot.practise.util.paginator.PageRender;
 
 @Controller
 @RequestMapping("/user")
@@ -44,30 +40,13 @@ public class UserController extends BaseController{
 	//Keys model
 	private static final String KEY_USERDTO = "userDTO";
 	private static final String KEY_USER_ALIAS = "userAlias";
-	private static final String KEY_SHOW_MODAL = "showModal";
-	private static final String KEY_LIST_OF_USERS = "listOfUsers";
 	private static final String KEY_USER_NOT_FOUND = "userNotFound";
-	private static final String KEY_MSG_PROP_BODY_MODAL = "messagePropertiesBodyModal";
-	private static final String KEY_MSG_PROP_TITTLE_MODAL = "messagePropertiesTittleModal";
 
-	//Keys message.properties
-	private static final String MODAL_TITULO_OK = "modal.titulo.ok";
-	private static final String MODAL_TITULO_KO = "modal.titulo.ko";
-	private static final String MODAL_BODY_KO = "modal.body.ko";
-	private static final String MODAL_BODY_OK = "modal.body.ok";
-	
 	//Redirects
-	private static final String REDIRECT_USER_SHOW_ALL_USER = "redirect:/user/showAllUser";
 	private static final String REDIRECT_SHOW_USER = "redirect:showUser/";
-	
-	//Others
-	private static final String DEFAULT_NUM_ROWS_PAGE = "10";
-	private static final String DEFAULT_NUM_PAGE = "0";
 	
 	@Autowired
 	private UserService userService;
-	@Autowired
-	private MessageSource messageSource;
 	
 
 	/**
@@ -86,7 +65,7 @@ public class UserController extends BaseController{
 	}
 	
 	/**
-	 * Insert in bbdd a new user
+	 * Create a new user
 	 * @param UserDTO newUserDTO 
 	 * @return template showUSer
 	 */
@@ -141,72 +120,45 @@ public class UserController extends BaseController{
 	}
 	
 	/**
-	 * Show a template with a table of all users an their information
+	 * Show a template with a table of all users with their information
 	 * @return a template with a table of all users an their information
 	 */
 	@GetMapping("/showAllUser")
-	public String showAllUsers(@RequestParam(name="page", defaultValue=DEFAULT_NUM_PAGE) int page,
-								@RequestParam(name="rowsPerPage", defaultValue=DEFAULT_NUM_ROWS_PAGE) int rowsPage,
-								@ModelAttribute(KEY_SHOW_MODAL) String attrRedirectShowModal, 
-								@ModelAttribute(KEY_MSG_PROP_TITTLE_MODAL) String attrRedirectTittleMessage,  
-								@ModelAttribute(KEY_MSG_PROP_BODY_MODAL) String attrRedirectBodyMessage, 
-								Model model) {
-		LOG.debug("Call to showAllUser() ");
-		
-		Pageable pageable = PageRequest.of(page, rowsPage);
-		Page<UserDTO> pageUserDTO = userService.getUsersPaged(pageable);
-		if(pageUserDTO != null) {
-			//When param page recived is biger than total pages available
-			if(pageUserDTO.getTotalPages() < page) {
-				rowsPage = Integer.valueOf(DEFAULT_NUM_ROWS_PAGE);
-				page = Integer.valueOf(DEFAULT_NUM_PAGE);
-				pageable = PageRequest.of(page, rowsPage);
-				pageUserDTO = userService.getUsersPaged(pageable);
-			}
-			PageRender<UserDTO> pageRender = new PageRender<>("/user/showAllUser", pageUserDTO);
-			model.addAttribute(KEY_LIST_OF_USERS, pageUserDTO);
-			model.addAttribute("page", pageRender);
-		}
-		else 
-			model.addAttribute(KEY_USER_NOT_FOUND, Boolean.TRUE);
-		
-		model.addAttribute("rowsPerPage", rowsPage);
-		LOG.debug("Finishing call to showAllUser() ");
-		
+	public String showAllUsers() {
 		return TEMPLATE_SHOW_ALL_USERS;
+	}
+	
+	/**
+	 * Return a DataTableResultDTO with list of users
+	 * @param params
+	 * @return
+	 */
+	@PostMapping("/table/users")
+	public @ResponseBody DataTableResultDTO<UserDTO> getListOfUsers(@ModelAttribute DataTableParamsDTO params){
+		Page<UserDTO> pageUserDTO = userService.getUsersPaged(params.getPageRequest());
+		return new  DataTableResultDTO<>(pageUserDTO, params.getsEcho(), null);
 	}
 	
 
 	/**
-	 * Delete a user by userAlias
-	 * @param userAlias of an user
-	 * @param redir RedirectAttributes
-	 * @return view of users
+	 * Delete a user by id
+	 * @param id
+	 * @return True if user with id given was deleted, false in other case
 	 */
-	@GetMapping(value="/deleteUser/{id}")
-	public String deleteUser(@PathVariable Long id, RedirectAttributes redir, Locale locale) {
-		LOG.debug("Call to deleteUser()");
-		
-		redir.addFlashAttribute(KEY_SHOW_MODAL, Boolean.TRUE);
+	@DeleteMapping(value="/delete/{id}")
+	public @ResponseBody Boolean deleteUser(@PathVariable Long id) {
+		LOG.debug("Call to deleteUser()");	
 		try {
 			 Boolean userDeleted = userService.deleteUser(id);
-			if(userDeleted) {
-				redir.addFlashAttribute(KEY_MSG_PROP_TITTLE_MODAL, messageSource.getMessage(MODAL_TITULO_OK, null, locale));
-				redir.addFlashAttribute(KEY_MSG_PROP_BODY_MODAL, messageSource.getMessage(MODAL_BODY_OK, null, locale));
-			}
-			else {
-				throw new Exception();
-			}
+			 if(userDeleted)
+				 return Boolean.TRUE;
+			 else
+				 return Boolean.FALSE;
 		} catch (Exception e) {
-			redir.addFlashAttribute(KEY_MSG_PROP_TITTLE_MODAL, messageSource.getMessage(MODAL_TITULO_KO, null, locale));
-			redir.addFlashAttribute(KEY_MSG_PROP_BODY_MODAL, messageSource.getMessage(MODAL_BODY_KO, null, locale));
 			LOG.error(new StringBuilder("Error deleting user with id: ").append(id).toString());
 			LOG.debug("Finishing call to deleteUser() ");
-			return REDIRECT_USER_SHOW_ALL_USER;
+			return Boolean.FALSE;
 		}
-		
-		LOG.debug("Finishing call to deleteUser() ");
-		return REDIRECT_USER_SHOW_ALL_USER;
 	}
 	
 	/**

@@ -18,14 +18,3 @@
 	height:20px;
 	width:20px; 
 }
-
-
-select#languageSelector option[value="es"]{
-	background:url(img/bootstrap-formhelpers-countries.flags.png);
-	background-position:-986px 0;
-}
-select#languageSelector option[value="en"]{
-	background:url(img/bootstrap-formhelpers-countries.flags.png);
-	background-position:-1156px 0;
-}
-

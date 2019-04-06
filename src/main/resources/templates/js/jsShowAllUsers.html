@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+
+<html xmlns:th="http://www.thymeleaf.org">
+
+	<div th:fragment="jsShowAllUsers">
+		<script>
+			var dataTableUsers;
+			var editor; // use a global for the submit and return data rendering in the examples
+			$(document).ready(function(){
+				dataTableUsers = $("#idTableListUsers").DataTable({	
+					"sAjaxSource": "[[@{/user/table/users}]]",
+					"processing": true,
+					"serverSide": true,
+					"ordering": true,
+					"searching": false,
+					"paging": true,
+					"pageLength": 10,
+					"sServerMethod": "POST", 
+					"lengthChange": true,
+					"columns": [
+							      	{ "data": "userAlias", "title": "[[#{user.alias}]]", "orderable": false },
+							      	{ "data": "name", "title": "[[#{user.name}]]", "orderable": false },
+							      	{ "data": "surnames", "title": "[[#{user.surnames}]]", "orderable": false },
+							      	{ "data": "dateOfBirth", "title": "[[#{user.date.of.birth}]]", "orderable": false },
+							      	{ "data": "mobilNumber", "title": "[[#{user.mobil}]]", "orderable": false },
+							      	{ "data": "email", "title": "[[#{user.email}]]", "orderable": false },
+									{ "data": null, "title": "[[#{user.actions}]]", "orderable": false,
+												"createdCell": function (nTd, cellData, rowData, iRow, iCol) { 
+						      						$(nTd).html('<ul class="list-inline">'+
+													'<li class="list-inline-item"><a href="[[@{/user/showUser/}]]'+ rowData['userAlias'] +'"><img src="/icons/eye.svg" alt="Show users data" class="icons-actions-size"/></a></li>'+
+													'<li class="list-inline-item"><a href="[[@{/user/editUser/}]]'+ rowData['id'] +'"><img src="/icons/edit.svg"	alt="Show user0s data" class="icons-actions-size"/></a></li>'+
+													'<li class="list-inline-item"><a href="javascript:deleteUserById('+ rowData['id'] +')"><img src="/icons/trashcan.svg"	alt="Show user0s data" class="icons-actions-size"/></a></li>'+
+													'</ul>');
+												}
+									}
+								],
+								 "language": {
+					            	  "lengthMenu": "[[#{label.home.table.sLengthMenu}]]",
+					            	  "info": "[[#{label.home.table.sInfo}]]",
+					            	  "infoEmpty": "[[#{label.home.table.sInfoEmpty}]]",
+					            	  "infoFiltered": "[[#{label.home.table.sInfoFiltered}]]",
+					            	  "search": "[[#{label.home.table.sSearch}]]",
+					            	  "zeroRecords": "[[#{label.home.table.sZeroRecords}]]",
+					            	  "loadingRecords": "[[#{label.home.table.processing}]]",
+					    	    	  "paginate": {
+						            	  "first": "[[#{label.home.table.first}]]",
+					            		  "last": "[[#{label.home.table.last}]]",
+					            		  "next": "[[#{label.home.table.next}]]",
+					            		  "previous": "[[#{label.home.table.previous}]]"
+					    	    	  }
+					              }
+						} );			
+			});
+			
+			function deleteUserById(id){
+				openModal("modalConfirmation");
+				$("#idBtnConfirmationAcept").click(function(){
+					closeModal("modalConfirmation");
+					$.ajax({
+						type : "DELETE",
+						dataType: "json",
+						url : "[[@{/user/delete/}]]"+id,
+						timeout : 100000,
+						success : function(data) {
+							if(data){
+								openCustomModal('modalInformationCustom', '[[#{modal.title.ok}]]' ,'[[#{modal.body.ok}]]');
+								dataTableUsers.draw();
+							}else{
+								openCustomModal('modalInformationCustom', '[[#{modal.title.ko}]]' ,'[[#{modal.body.ko}]]'); 
+							}
+						},
+						error : function(e) {
+							openCustomModal('modalInformationCustom','[[#{modal.title.ko}]]' , '[[#{modal.body.ko}]]');
+						}
+					});
+				})
+			}
+		</script>
+	</div>
+</html>

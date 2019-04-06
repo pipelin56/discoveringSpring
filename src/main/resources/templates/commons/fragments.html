@@ -10,21 +10,16 @@
 		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
 			integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"	crossorigin="anonymous">
 		<link rel="stylesheet" type="text/css" href="/css/custom.css">
-		<!-- Bootstrap Form Helpers -->
-		<link href="/css/bootstrap-formhelpers.min.css" rel="stylesheet" media="screen">
-		
+		<link href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css" rel="stylesheet" media="screen">
 		
 		<!-- Javascript -->
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.7.1/js/bootstrap-datepicker.min.js"></script>
 		<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
+		<script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
 		<script src="/js/utils.js"></script>
 		<script src="/js/datePicker.js"></script>
 		<script src="/js/validationsForm.js"></script>
-		
-		<!-- Bootstrap Form Helpers -->
-		<script src="/js/bootstrap-formhelpers.min.js"></script>
-				
 	</th:block>
 
 
@@ -57,45 +52,6 @@
 		</nav>
 		
 	</div>
-	
-	<!-- Fragment table paginator -->
-	<div th:fragment="paginator">
-		<input type="hidden" id="numRows" th:value="${page.totalRows}"/>
-		<nav>
-			<ul class="pagination">
-				<li th:class="${page.first ? 'page-item disabled' : 'page-item'}">
-					<span class="page-link" th:if="${page.first}" th:text="#{btn.first}"></span>
-					<a class="page-link" th:if="${not page.first}" th:href="@{${page.url}(page=0)}" th:text="#{btn.first}"></a>
-				</li>
-				<li th:class="${page.hasPrevious? 'page-item' : 'page-item disabled'}">
-					<span class="page-link" th:if="${not page.hasPrevious}">&laquo</span>
-					<a class="page-link" th:if="${page.hasPrevious}" th:href="@{${page.url}(page=${page.actualPage-2})}">&laquo</a>
-				</li>
-				<li th:each="item : ${page.listOfPages}"  class="page-item" th:class="${item.isActual? 'page-item disabled' : 'page-item'}">
-					<span class="page-link" th:if="${item.isActual}" th:text="${item.numberOfPage}"></span>
-					<a class="page-link" th:if="${not item.isActual}" th:href="@{${page.url}(page=${item.numberOfPage-1})}" th:text="${item.numberOfPage}"></a>
-				</li>
-				<li  th:class="${page.hasNext? 'page-item' : 'page-item disabled'}">
-					<span class="page-link" th:if="${not page.hasNext}">&raquo</span>
-					<a class="page-link" th:if="${page.hasNext}" th:href="@{${page.url}(page=${page.actualPage})}">&raquo</a>
-				</li>
-				<li  th:class="${page.last? 'page-item disabled' : 'page-item'}">
-					<span class="page-link" th:if="${page.last}" th:text="#{btn.last}"></span>
-					<a class="page-link" th:if="${not page.last}" th:href="@{${page.url}(page=${page.totalPages-1})}" th:text="#{btn.last}"></a>
-				</li>
-				<li >
-					<input type="hidden" th:value="${rowsPerPage}"/>
-					<select th:with="rowsPerPage = *{rowsPerPage}"name="rowsPerPage" id="rowsPerPageSelector" class="page-link" >
-						<option th:each="i : ${listOfRowsPerPage}" 
-								th:value="${i}" 
-								th:text="${i}"
-			      				th:selected="${i==rowsPerPage}"></option>
-					</select>
-				</li>
-			</ul>
-		</nav>
-	</div>
-	
 
 	<!-- Modal simple -->
 	<div th:fragment="modal">
@@ -126,5 +82,50 @@
 			});
 		</script>
 	</div>
+	
+	<th:block th:fragment="modalInformationCustom">
+		
+		<div class="modal fade" id="modalInformationCustom" tabindex="-1" role="dialog">
+		  <div class="modal-dialog" role="document">
+		    <div class="modal-content">
+		      <div class="modal-header">
+	        	<h5 class="modal-title" th:id="idModalInfoTitle"></h5>
+		        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+		          <span aria-hidden="true">&times;</span>
+		        </button>
+		      </div>
+		      <div class="modal-body">
+		         <p th:id="idModalInfoDescription"></p>
+		      </div>
+		      <div class="modal-footer">
+		        <button type="button" class="btn btn-primary" data-dismiss="modal">Ok!</button>
+		      </div>
+		    </div>
+		  </div>
+		</div>
+	</th:block>
+	
+	<th:block th:fragment="modalConfirmation">
+		<div class="modal fade" id="modalConfirmation" tabindex="-1" role="dialog" aria-labelledby="loadMeLabel">
+		  <div class="modal-dialog modal-sm" role="document">
+		    <div class="modal-content">
+		    	<div class="modal-header">
+		        <h5 class="modal-title" th:text="#{modal.confirmation.title}"></h5>
+		      </div>
+		      <div class="modal-body">
+		           <p th:text="#{modal.confirmation.description}"></p>
+		      </div>
+		      <div class="modal-footer" style="display: initial !important;">
+				<div class="float-left">
+				      	<button type="button" class="btn btn-light btn-sm" data-dismiss="modal" th:text="#{modal.btn.cancel}"></button>
+				</div>
+				<div class="float-right">
+				      	<button type="button" class="btn btn-light btn-sm" id="idBtnConfirmationAcept" th:text="#{modal.btn.acept}"></button>
+				</div>
+		      	</div>
+		    </div>
+		  </div>
+		</div>
+	</th:block>
   
 </html>

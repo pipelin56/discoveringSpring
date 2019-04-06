@@ -70,8 +70,6 @@ function createUrlWithNewParams(params, url = window.location.href){
 	return url;
 }
 
-
-
 /**
  * Clear form's fields
  * @param form
@@ -93,4 +91,18 @@ function clearFieldsForm(form){
 			}
 		});
 	}
+}
+
+function closeModal(modal){
+	$('#'+modal).modal('toggle');
+}
+
+function openModal(modal){
+	$('#'+modal).modal('show');
+}
+
+function openCustomModal(modal, title, description){	
+	$('#idModalInfoTitle').text(title);
+	$('#idModalInfoDescription').text(description);
+	$('#'+modal).modal('show');
 }
