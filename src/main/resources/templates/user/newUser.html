@@ -1,28 +1,19 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head th:insert="~{commons/fragments :: header}">
-</head>
-<body>
+	<div th:fragment="newUser" class="container-fluid">
 		
-	<div th:insert="~{commons/fragments :: menu}"></div>
-
-	<div class="container h100">
-		<div class="d-flex align-items-center flex-column justify-content-center">
-			<h1 th:text="#{tittle.new.user}" class="text-secondary border border-success border-top-0 border-left-0 border-right-0"></h1>
-		</div>
-		<div class="d-flex align-items-center flex-column justify-content-center">
-			<form  class="col-8 needs-validation" novalidate th:action="@{/user/newUser}" th:object="${userDTO}" id="formNewUser" method="post">
+		<h1 th:text="#{tittle.new.user}" class="display-3 border border-success border-top-0 border-left-0 border-right-0"></h1>
+		<div class="d-flex justify-content-center my-5">
+			<form  class="col-md-12 needs-validation" novalidate th:action="@{/user/newUser}" th:object="${userDTO}" id="formNewUser" method="post">
 				<div class="form-row">
 					<div class="form-group col-md-6">
 						<label th:text="#{user.name}"></label> 
-						<input type="text"
-							class="form-control" id="name" th:field="*{name}" name="name" required maxlength="30"/>
+						<input type="text" class="form-control" id="name" th:field="*{name}" name="name" required maxlength="30"/>
 						 <small th:if="${#fields.hasErrors('name')}"  class="form-text text-danger" th:errors="*{name}"></small>
 					</div>
 					<div class="form-group col-md-6">
 						<label th:text="#{user.surnames}"></label> 
-						<input type="text" class="form-control" id="surnames" th:field="*{surnames}"
-							name="surnames" required maxlength="40"/>
+						<input type="text" class="form-control" id="surnames" th:field="*{surnames}" name="surnames" required maxlength="40"/>
 						 <small th:if="${#fields.hasErrors('surnames')}" class="form-text text-danger" th:errors="*{surnames}"></small>
 					</div>
 				</div>
@@ -56,12 +47,12 @@
 		                  <input class="form-control"  data-date-format="dd/mm/yyyy" id="datepicker" th:field="*{dateOfBirth}" required>
 		            </div>
 				</div>
-		
-				<button type="submit" class="btn btn-primary" th:text="#{btn.save}"></button>
-				<button type="button" class="btn btn-primary" id="idButtonCleanFieldsForm" th:text="#{btn.clear.form}"></button>
+				<div class="d-flex justify-content-between">
+					<button type="button" class="btn btn-primary" id="idButtonCleanFieldsForm" th:text="#{btn.clear.form}"></button>
+					<button type="submit" class="btn btn-primary" th:text="#{btn.save}"></button>
+				</div>
 			</form>
 		</div>
 	</div>
-</body>
 
 </html>

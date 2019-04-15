@@ -18,12 +18,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.bind.support.SessionStatus;
-import org.springframework.web.servlet.ModelAndView;
 
 import com.example.spring.boot.practise.dto.DataTableParamsDTO;
 import com.example.spring.boot.practise.dto.DataTableResultDTO;
 import com.example.spring.boot.practise.dto.UserDTO;
 import com.example.spring.boot.practise.service.UserService;
+import com.example.spring.boot.practise.util.Constants;
 
 @Controller
 @RequestMapping("/user")
@@ -32,36 +32,21 @@ public class UserController extends BaseController{
 	
 	private static final Logger LOG = LoggerFactory.getLogger(UserController.class);
 	
-	//View's path
-	private static final String TEMPLATE_NEW_USER = "user/newUser";
-	private static final String TEMPLATE_SHOW_USER = "user/showUser";
-	private static final String TEMPLATE_SHOW_ALL_USERS = "user/showAllUsers";
-	
-	//Keys model
-	private static final String KEY_USERDTO = "userDTO";
-	private static final String KEY_USER_ALIAS = "userAlias";
-	private static final String KEY_USER_NOT_FOUND = "userNotFound";
-
-	//Redirects
-	private static final String REDIRECT_SHOW_USER = "redirect:showUser/";
-	
 	@Autowired
 	private UserService userService;
-	
 
 	/**
 	 * Shows template to create a new User
 	 * @return ModelAndView with an empty UserDTO and a template to create it
 	 */
 	@GetMapping("/newUser")
-	public ModelAndView newUser(Model model) {
+	public String newUser(Model model) {
 		LOG.debug("Call to newUser()");
-		
-		ModelAndView mav = new ModelAndView(TEMPLATE_NEW_USER);
-		mav.addObject(KEY_USERDTO, new UserDTO());
+		addLayoutParamsToModel(model, Constants.TEMPLATE_PATH_NEW_USER, Constants.TEMPLATE_NEW_USER);
+		model.addAttribute(Constants.KEY_USERDTO, new UserDTO());
 		
 		LOG.debug("Finishing call to newUser()");
-		return mav;
+		return Constants.TEMPLATE_LAYOUT;
 	}
 	
 	/**
@@ -75,7 +60,8 @@ public class UserController extends BaseController{
 
 		if(bindingResult.hasErrors()) {	
 			LOG.debug("Finishing call to newUser()  without save because new user has invalid input data");
-			return TEMPLATE_NEW_USER;
+			addLayoutParamsToModel(model, Constants.TEMPLATE_PATH_NEW_USER, Constants.TEMPLATE_NEW_USER);
+			return Constants.TEMPLATE_LAYOUT;
 		}else {
 			UserDTO userDTO=null;
 			try{
@@ -85,11 +71,12 @@ public class UserController extends BaseController{
 			}catch(Exception e) {
 				LOG.error(new StringBuilder("Exception in newUser when saving new user. Exception: ").append(e.getMessage()).toString());
 				LOG.debug("Finishing call to newUser() without save");
-				return TEMPLATE_NEW_USER;	
+				addLayoutParamsToModel(model, Constants.TEMPLATE_PATH_NEW_USER, Constants.TEMPLATE_NEW_USER);
+				return Constants.TEMPLATE_LAYOUT;
 			}
 			status.setComplete();
 			LOG.debug("Finishing call to newUser() after save new user: {}", userDTO);
-			return REDIRECT_SHOW_USER+userDTO.getUserAlias();
+			return Constants.REDIRECT_SHOW_USER+userDTO.getUserAlias();
 		}
 	}
 	
@@ -100,23 +87,22 @@ public class UserController extends BaseController{
 	 * @throws Exception
 	 */
 	@GetMapping("/showUser/{userAlias}")
-	public ModelAndView showUser(@PathVariable String userAlias) throws Exception {
+	public String showUser(@PathVariable String userAlias, Model model) throws Exception {
 		LOG.debug("Call to showUser() with param: {}", userAlias);
 		
-		ModelAndView mav = new ModelAndView(TEMPLATE_SHOW_USER);
 		
 		UserDTO userDTO = userService.getUserByUserAlias(userAlias);
 		if(userDTO != null) {
-			mav.addObject(KEY_USERDTO, userDTO);
+			model.addAttribute(Constants.KEY_USERDTO, userDTO);
 			LOG.debug("user found: {}",userDTO);
 		}else {
-			mav.addObject(KEY_USER_NOT_FOUND, Boolean.TRUE);
-			mav.addObject(KEY_USER_ALIAS, userAlias);
+			model.addAttribute(Constants.KEY_USER_NOT_FOUND, Boolean.TRUE);
+			model.addAttribute(Constants.KEY_USER_ALIAS, userAlias);
 			LOG.debug("user: {} not found", userAlias);
 		}
-		
+		addLayoutParamsToModel(model, Constants.TEMPLATE_PATH_SHOW_USER, Constants.TEMPLATE_SHOW_USER);
 		LOG.debug("Finishing call to showUser()");
-		return mav;
+		return Constants.TEMPLATE_LAYOUT;
 	}
 	
 	/**
@@ -124,8 +110,9 @@ public class UserController extends BaseController{
 	 * @return a template with a table of all users an their information
 	 */
 	@GetMapping("/showAllUser")
-	public String showAllUsers() {
-		return TEMPLATE_SHOW_ALL_USERS;
+	public String showAllUsers(Model model) {
+		addLayoutParamsToModel(model, Constants.TEMPLATE_PATH_ALL_USER, Constants.TEMPLATE_ALL_USER);
+		return Constants.TEMPLATE_LAYOUT;
 	}
 	
 	/**
@@ -138,7 +125,6 @@ public class UserController extends BaseController{
 		Page<UserDTO> pageUserDTO = userService.getUsersPaged(params.getPageRequest());
 		return new  DataTableResultDTO<>(pageUserDTO, params.getsEcho(), null);
 	}
-	
 
 	/**
 	 * Delete a user by id
@@ -176,7 +162,8 @@ public class UserController extends BaseController{
 			if(userDTO== null)
 				throw new Exception();
 			else {
-				model.addAttribute(KEY_USERDTO, userDTO);
+				model.addAttribute(Constants.KEY_USERDTO, userDTO);
+				addLayoutParamsToModel(model, Constants.TEMPLATE_PATH_NEW_USER, Constants.TEMPLATE_NEW_USER);
 			}
 			
 		}catch(Exception e) {
@@ -184,7 +171,7 @@ public class UserController extends BaseController{
 		}
 		
 		LOG.debug("Finishing call to editUser() ");
-		return TEMPLATE_NEW_USER;
+		return Constants.TEMPLATE_LAYOUT;
 	}
 	
 	

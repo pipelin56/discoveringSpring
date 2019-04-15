@@ -28,5 +28,10 @@ public abstract class BaseController {
 	public void getLocaleSession(Model model, Locale locale) {
 		model.addAttribute(KEY_LOCALE, locale.getLanguage());
 	}
+	
+	public void addLayoutParamsToModel(Model model, String path, String template) {
+		model.addAttribute("keyPathTemplate", path);
+		model.addAttribute("keyTemplate", template);
+	}
 
 }

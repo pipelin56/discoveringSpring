@@ -1,0 +1,11 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:insert="~{commons/fragments :: header}">
+</head>
+<body>
+	<header th:insert="~{commons/fragments :: menu}" class="mb-5"></header>
+	<div class="container d-flex justify-content-center py-5">
+	<div th:replace="${keyPathTemplate} :: ${keyTemplate}"></div>
+	</div>
+</body>
+</html>
