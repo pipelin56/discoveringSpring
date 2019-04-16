@@ -13,6 +13,7 @@ public class DataTableParamsDTO implements Serializable{
 	private Integer iDisplayLength;
 	private Integer sEcho;
 	private Integer iDisplayStart;
+	private String sSearch;
 	
 	public DataTableParamsDTO() {}
 
@@ -41,10 +42,15 @@ public class DataTableParamsDTO implements Serializable{
 	}
 	
 	public PageRequest getPageRequest() {
-		//if(iDisplayLength < 0 || iDisplayLength > 25 || iDisplayStart < 0 )
-		//	return PageRequest.of(Constants.DEFAULT_NUM_PAGE, Constantes.DEFAULT_NUM_ROWS);
-		//else
 			return  PageRequest.of(this.iDisplayStart/this.iDisplayLength, this.iDisplayLength);
+	}
+
+	public String getsSearch() {
+		return sSearch;
+	}
+
+	public void setsSearch(String sSearch) {
+		this.sSearch = sSearch;
 	}
 	
 	

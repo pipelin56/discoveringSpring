@@ -7,10 +7,10 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.example.spring.boot.practise.dto.DataTableParamsDTO;
 import com.example.spring.boot.practise.dto.UserDTO;
 import com.example.spring.boot.practise.entities.User;
 import com.example.spring.boot.practise.repositories.UserRepository;
@@ -21,7 +21,7 @@ import com.example.spring.boot.practise.util.UtilsConvertDTO;
 public class UserServiceImpl implements UserService {
 	
 	@Autowired
-	UserRepository userRepository;
+	private UserRepository userRepository;
 	
 
 	@Override
@@ -89,9 +89,9 @@ public class UserServiceImpl implements UserService {
 	}
 	
 	@Override
-	public Page<UserDTO> getUsersPaged(Pageable pageable) {
-		Page<User> pageUser = userRepository.findAll(pageable);
-		return  new PageImpl<>(UtilsConvertDTO.convertListUserToListUserDTO(pageUser.getContent()), pageable, pageUser.getTotalElements());
+	public Page<UserDTO> getUsersPaged(DataTableParamsDTO params) {
+		Page<User> pageUser = userRepository.findByUserAliasLikeOrNameLike(params.getPageRequest(), params.getsSearch());
+		return  new PageImpl<>(UtilsConvertDTO.convertListUserToListUserDTO(pageUser.getContent()), params.getPageRequest(), pageUser.getTotalElements());
 	}
 
 

@@ -8,15 +8,27 @@
 			var editor; // use a global for the submit and return data rendering in the examples
 			$(document).ready(function(){
 				dataTableUsers = $("#idTableListUsers").DataTable({	
-					"sAjaxSource": "[[@{/user/table/users}]]",
+					"sAjaxSource": "[[@{/user/table}]]",
 					"processing": true,
 					"serverSide": true,
-					"ordering": true,
-					"searching": false,
+					"ordering": false,
+					"searching": true,
+					"searchDelay":1000,//Delay to avoid many loads on server side
 					"paging": true,
 					"pageLength": 10,
+					"responsive": true,
+					"columnDefs": [
+				        { responsivePriority: 1, targets: 0 },
+				        { responsivePriority: 2, targets: -1 },
+				        { "searchable": false, "targets": 1 },
+				        { "searchable": false, "targets": 2 },
+				        { "searchable": false, "targets": 3 },
+				        { "searchable": false, "targets": 4 },
+				        { "searchable": false, "targets": 5 },
+				        { "searchable": false, "targets": 6 },
+				    ],
 					"sServerMethod": "POST", 
-					"lengthChange": true,
+					"pagingType": "full_numbers",
 					"columns": [
 							      	{ "data": "userAlias", "title": "[[#{user.alias}]]", "orderable": false },
 							      	{ "data": "name", "title": "[[#{user.name}]]", "orderable": false },
@@ -27,8 +39,8 @@
 									{ "data": null, "title": "[[#{user.actions}]]", "orderable": false,
 												"createdCell": function (nTd, cellData, rowData, iRow, iCol) { 
 						      						$(nTd).html('<ul class="list-inline">'+
-													'<li class="list-inline-item"><a href="[[@{/user/showUser/}]]'+ rowData['userAlias'] +'"><img src="/icons/eye.svg" alt="Show users data" class="icons-actions-size"/></a></li>'+
-													'<li class="list-inline-item"><a href="[[@{/user/editUser/}]]'+ rowData['id'] +'"><img src="/icons/edit.svg"	alt="Show user0s data" class="icons-actions-size"/></a></li>'+
+													'<li class="list-inline-item"><a href="[[@{/user/show/}]]'+ rowData['userAlias'] +'"><img src="/icons/eye.svg" alt="Show users data" class="icons-actions-size"/></a></li>'+
+													'<li class="list-inline-item"><a href="[[@{/user/edit/}]]'+ rowData['id'] +'"><img src="/icons/edit.svg"	alt="Show user0s data" class="icons-actions-size"/></a></li>'+
 													'<li class="list-inline-item"><a href="javascript:deleteUserById('+ rowData['id'] +')"><img src="/icons/trashcan.svg"	alt="Show user0s data" class="icons-actions-size"/></a></li>'+
 													'</ul>');
 												}

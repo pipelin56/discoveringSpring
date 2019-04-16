@@ -24,5 +24,5 @@ public class Constants {
 	public static final String TEMPLATE_PATH_ALL_USER = "user/showAllUsers";
 	
 	//Redirects
-	public static final String REDIRECT_SHOW_USER = "redirect:showUser/";
+	public static final String REDIRECT_SHOW_USER = "redirect:show/";
 }

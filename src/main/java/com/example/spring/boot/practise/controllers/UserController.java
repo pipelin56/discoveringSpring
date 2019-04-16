@@ -39,7 +39,7 @@ public class UserController extends BaseController{
 	 * Shows template to create a new User
 	 * @return ModelAndView with an empty UserDTO and a template to create it
 	 */
-	@GetMapping("/newUser")
+	@GetMapping("/new")
 	public String newUser(Model model) {
 		LOG.debug("Call to newUser()");
 		addLayoutParamsToModel(model, Constants.TEMPLATE_PATH_NEW_USER, Constants.TEMPLATE_NEW_USER);
@@ -54,7 +54,7 @@ public class UserController extends BaseController{
 	 * @param UserDTO newUserDTO 
 	 * @return template showUSer
 	 */
-	@PostMapping("/newUser")
+	@PostMapping("/new")
 	public String saveNewuser(@Valid @ModelAttribute UserDTO newUserDTO, BindingResult bindingResult, Model model, SessionStatus status) {
 		LOG.debug("Call to newUser() with data: {}",newUserDTO);
 
@@ -86,7 +86,7 @@ public class UserController extends BaseController{
 	 * @return ModelAndView with template and information about an user
 	 * @throws Exception
 	 */
-	@GetMapping("/showUser/{userAlias}")
+	@GetMapping("/show/{userAlias}")
 	public String showUser(@PathVariable String userAlias, Model model) throws Exception {
 		LOG.debug("Call to showUser() with param: {}", userAlias);
 		
@@ -109,7 +109,7 @@ public class UserController extends BaseController{
 	 * Show a template with a table of all users with their information
 	 * @return a template with a table of all users an their information
 	 */
-	@GetMapping("/showAllUser")
+	@GetMapping("/show/all")
 	public String showAllUsers(Model model) {
 		addLayoutParamsToModel(model, Constants.TEMPLATE_PATH_ALL_USER, Constants.TEMPLATE_ALL_USER);
 		return Constants.TEMPLATE_LAYOUT;
@@ -120,9 +120,9 @@ public class UserController extends BaseController{
 	 * @param params
 	 * @return
 	 */
-	@PostMapping("/table/users")
+	@PostMapping("/table")
 	public @ResponseBody DataTableResultDTO<UserDTO> getListOfUsers(@ModelAttribute DataTableParamsDTO params){
-		Page<UserDTO> pageUserDTO = userService.getUsersPaged(params.getPageRequest());
+		Page<UserDTO> pageUserDTO = userService.getUsersPaged(params);
 		return new  DataTableResultDTO<>(pageUserDTO, params.getsEcho(), null);
 	}
 
@@ -153,7 +153,7 @@ public class UserController extends BaseController{
 	 * @param model
 	 * @return redirect to template showUser which shows user's information
 	 */
-	@GetMapping("/editUser/{id}")
+	@GetMapping("/edit/{id}")
 	public String editUser(@PathVariable Long id, Model model) {
 		LOG.debug("Call to editUser()");
 		

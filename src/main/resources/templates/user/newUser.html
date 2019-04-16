@@ -4,7 +4,7 @@
 		
 		<h1 th:text="#{tittle.new.user}" class="display-3 border border-success border-top-0 border-left-0 border-right-0"></h1>
 		<div class="d-flex justify-content-center my-5">
-			<form  class="col-md-12 needs-validation" novalidate th:action="@{/user/newUser}" th:object="${userDTO}" id="formNewUser" method="post">
+			<form  class="col-md-12 needs-validation" novalidate th:action="@{/user/new}" th:object="${userDTO}" id="formNewUser" method="post">
 				<div class="form-row">
 					<div class="form-group col-md-6">
 						<label th:text="#{user.name}"></label> 

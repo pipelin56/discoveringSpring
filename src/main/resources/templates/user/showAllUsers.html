@@ -5,8 +5,8 @@
 	<div th:fragment="showAllUsers" class="container-fluid d-felx justify-content-center">
 		<h1 th:text="#{tittle.all.users}" class="display-3 border border-success border-top-0 border-left-0 border-right-0"></h1>
 		
-		<div class="col-md-12 my-5 pl-5">
-			<table id="idTableListUsers" class="table table-striped"></table>
+		<div class="my-5">
+			<table id="idTableListUsers" class="table table-striped table-bordered dt-responsive nowrap" style="width:100%"></table>
 		</div>
 		
 		<div th:insert="~{commons/fragments :: modalConfirmation}"></div>
